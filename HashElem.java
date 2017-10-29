@@ -28,4 +28,7 @@ public class HashElem<K, V>{
 	public HashElem getNext(){
 		return next;
 	}
+	public void setNext(HashElem next_elem){
+		this.next = next_elem;
+	}
 }
