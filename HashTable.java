@@ -44,33 +44,55 @@ public class HashTable<K, V>{
 		if(this.loadFactor() > 0.75){
 			this.reHash();
 		}
-		//if there is already an elemet at that index
+		//if there is already an element at that index
 		if(hash_table.get(tab_key) != null){
 			temp_elem = hash_table.get(tab_key);
+			//variable that tells us what to do in various cases
+			int cond = 0;
+			//start null, and change if we need to set it to something else
+			HashElem next_elem = null;
 			//go down the chain until we find the element
-			while(temp_elem.getNext() != null){
+			while(temp_elem != null){
 				//if we are putting in an element we already have in the table
-				if(temp_elem.getKey() == temp_elem.getNext().getKey()){
-
+				if(key == temp_elem.getKey()){
+					//we have found our element, so break the loop
+					cond = 1;
+					break;
 				}
 				temp_elem = temp_elem.getNext();
 			}
-			put_elem = new HashElem(key, value, temp_elem, null);
-			temp_elem.setNext(put_elem);
-			keys_n++;
+			//the element was already in the table
+			//and we're just changing the value
+			if(cond == 1){
+				temp_elem.setValue(value);
+			}
+			//the element wasn't in the table, so 
+			//put it at the end of the chain
+			else if(temp_elem.getNext() == null){
+				put_elem = new HashElem(key, value, temp_elem, null);
+				temp_elem.setNext(put_elem);
+				keys_n++;
+			}
 		}
+		//if there is no element at that index
 		else{
 			put_elem = new HashElem(key, value, null, null);
 			keys_n++;
+			hash_table.add(tab_key, put_elem);
 		}
-		hash_table.add(tab_key, put_elem);
 	}
 	//gets the value associated with a certain key
 	public V get(K key){
-		int tab_key = Math.abs(key.hashCode()%size_m);
-		HashElem<K, V> temp_elem = hash_table.get(tab_key);
-		if(temp_elem != null){
-			return temp_elem.getValue();
+		int tab_index = Math.abs(key.hashCode()%size_m);
+		HashElem<K, V> temp_elem = hash_table.get(tab_index);
+		while(temp_elem != null){
+			//if this is the key
+			if(temp_elem.getKey() == key){
+				//return the value
+				return temp_elem.getValue();
+			}
+			//keep looking down the chain
+			temp_elem = temp_elem.getNext();
 		}
 		else{
 			return null;
