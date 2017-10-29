@@ -45,6 +45,7 @@ public class HashTable<K, V>{
 			this.reHash();
 		}
 		//if there is already an element at that index
+		System.out.println(hash_table.get(tab_key));
 		if(hash_table.get(tab_key) != null){
 			temp_elem = hash_table.get(tab_key);
 			//variable that tells us what to do in various cases
@@ -52,23 +53,30 @@ public class HashTable<K, V>{
 			//start null, and change if we need to set it to something else
 			HashElem next_elem = null;
 			//go down the chain until we find the element
-			while(temp_elem != null){
+			do{
 				//if we are putting in an element we already have in the table
-				if(key == temp_elem.getKey()){
+				if(key.equals(temp_elem.getKey())){
 					//we have found our element, so break the loop
+					System.out.println("found");
 					cond = 1;
 					break;
 				}
-				temp_elem = temp_elem.getNext();
-			}
+				if(temp_elem.getNext() != null){
+					temp_elem = temp_elem.getNext();
+				}
+			}while(temp_elem.getNext() != null);
 			//the element was already in the table
 			//and we're just changing the value
+			System.out.println(temp_elem);
+			System.out.println(hash_table.get(tab_key).getNext());
 			if(cond == 1){
+				System.out.println("element was in table");
 				temp_elem.setValue(value);
 			}
 			//the element wasn't in the table, so 
 			//put it at the end of the chain
 			else if(temp_elem.getNext() == null){
+				System.out.println("putting in at end of chain");
 				put_elem = new HashElem(key, value, temp_elem, null);
 				temp_elem.setNext(put_elem);
 				keys_n++;
@@ -76,37 +84,44 @@ public class HashTable<K, V>{
 		}
 		//if there is no element at that index
 		else{
+			System.out.println("putting in a fre$h new element");
 			put_elem = new HashElem(key, value, null, null);
 			keys_n++;
-			hash_table.add(tab_key, put_elem);
+			hash_table.set(tab_key, put_elem);
 		}
 	}
-	//gets the value associated with a certain key
+	//returns the value associated with a certain key
 	public V get(K key){
+		System.out.println("getting the value...");
 		int tab_index = Math.abs(key.hashCode()%size_m);
+		System.out.println("getting index... " + tab_index);
 		HashElem<K, V> temp_elem = hash_table.get(tab_index);
 		while(temp_elem != null){
+			System.out.println("got element... " + temp_elem.getValue());
 			//if this is the key
-			if(temp_elem.getKey() == key){
+			if(temp_elem.getKey().equals(key)){
 				//return the value
 				return temp_elem.getValue();
 			}
 			//keep looking down the chain
 			temp_elem = temp_elem.getNext();
 		}
-		else{
-			return null;
-		}
+		return null;
 	}
 	//checks whether a key is valid in the table
 	public boolean contains(K key){
-		int temp_hash = makeHash(key, prime_ind);
-		if(hash_table.get(temp_hash) != null){
-			return true;
+		int tab_index = Math.abs(key.hashCode()%size_m);
+		HashElem<K, V> temp_elem = hash_table.get(tab_index);
+		while(temp_elem != null){
+			//if this is the key
+			if(temp_elem.getKey().equals(key)){
+				//return true
+				return true;
+			}
+			//keep looking down the chain
+			temp_elem = temp_elem.getNext();
 		}
-		else{
-			return false;
-		}
+		return false;
 	}
 	//deletes an element at a certain key
 	public void delete(K key){
@@ -153,5 +168,22 @@ public class HashTable<K, V>{
 				}
 			}
 		}
+	}
+	public void printTable(){
+		int i;
+		System.out.println("----Hash Table----");
+		for(i = 0; i < hash_table.size(); i++){
+			if(hash_table.get(i) != null){
+				K tk = hash_table.get(i).getKey();
+				V tv = hash_table.get(i).getValue();
+				String ks = tk.toString();
+				String vs = tv.toString();
+				System.out.println("Key: "+ks+" Value: "+vs);
+			}
+			else{
+				System.out.println("null");
+			}
+		}
+		System.out.println("------------------");
 	}
 }

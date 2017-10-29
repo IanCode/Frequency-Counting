@@ -26,10 +26,8 @@ public class WordFreqs{
 			System.out.println("Usage: java WordFreqs [file_path]");
 			System.exit(0);
 		}
-		
 		f_name = args[0];
 		path = Paths.get(f_name);
-		
         try{
         	reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
         	System.out.println("read file successfully\n");
@@ -86,15 +84,25 @@ public class WordFreqs{
 					value = new Integer(1);
 				}
 				//enter the new key, value pair into the table
+				//System.out.println("about to put: " + key);
 				hash_table.put(key, value);
+				//System.out.println("checking that we put it correctly...");
+				//System.out.println("value: " + hash_table.get(key));
+				hash_table.printTable();
 			}
 			System.out.println();
+			//hash_table.printTable();
 			for(i = 0; i < text_array.size(); i++){
 				String temp = (String)text_array.get(i);
-				System.out.println("index: " + i);
-				System.out.println("key: " + temp);
+				//System.out.println("\n\nindex in text array: " + i);
+				System.out.println("\nkey: " + temp);
+				int h_ind = Math.abs(temp.hashCode()%hash_table.getSize());
+				System.out.println("hash index: " + h_ind);
 				if(hash_table.get(temp) != null){
 					System.out.printf("value: %d\n", hash_table.get(temp));
+				}
+				else{
+					System.out.println("---------- " +temp + " not in hash table--------");
 				}
 			}
 			//Integer test = hash_table.get("was");
@@ -103,11 +111,17 @@ public class WordFreqs{
 			sc = new Scanner(System.in);
 			while(true){
 				System.out.print(">");
-				String next = sc.next();
-				if(next.equals("\n")){
+				String word = sc.nextLine();
+				if(word.equals("")){
 					System.exit(0);
 				}
-
+				if(hash_table.get(word) == null){
+					System.out.println("\"" + word + "\" does not appear.");
+				}
+				else{
+					Integer count = hash_table.get(word);
+					System.out.println("\"" + word + "\" appears " + count + " times.");
+				}
 			}
 
         } 

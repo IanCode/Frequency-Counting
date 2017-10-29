@@ -31,4 +31,7 @@ public class HashElem<K, V>{
 	public void setNext(HashElem next_elem){
 		this.next = next_elem;
 	}
+	public void setValue(V v){
+		value = v;
+	}
 }
