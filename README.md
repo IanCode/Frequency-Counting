@@ -1,7 +1,7 @@
 Ian White
 10/6/17
 
-# Word Counting with Hash Table
+# Word Counting with a Hash Table
 
 This program counts the words inside of a text file using a hash table. 
 
@@ -12,12 +12,14 @@ This project contains three separate classes. HashTable and HashElem must be use
 ### Usage
 
 To compile:
->javac HashTable.java HashElem.java WordFreqs.java
+`javac HashTable.java HashElem.java WordFreqs.java`
 
 To run:
->java WordFreqs [name of text file]
+`java WordFreqs [name of text file]`
 
 Type a "-" before a word to delete it.
 i.e.
->\>-france
->"france" has been deleted.
+```
+-france 
+"france" has been deleted.
+```
