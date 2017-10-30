@@ -1,13 +1,13 @@
 Ian White
 10/6/17
 
-#Word Counting with Hash Table
+#Word Counting with Hash Table#
 This program counts the words inside of a text file using a hash table. 
 
-###Description
+###Description###
 This project contains three separate classes. HashTable and HashElem must be used together, and can be used as general structures for any kind of program that requires a hash table. The WordFreqs program is an interactive program that uses the HashTable class.
 
-###Usage
+###Usage###
 To compile:
 javac HashTable.java HashElem.java WordFreqs.java
 
