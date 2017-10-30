@@ -5,11 +5,13 @@ import java.nio.file.*;
 import java.nio.charset.*;
 import java.util.*;
 
+/**
+A word counting program using the HashTable class. 
+Takes a text file and runs an interactive program that allows the user
+to query the count of specific words relatively quickly. 
+*/
 public class WordFreqs{
-
-
 	public static void main(String[] args){
-
 		String[] words_kept;
 		StringTokenizer words_ind;
 		BufferedReader reader;
@@ -30,44 +32,31 @@ public class WordFreqs{
 		path = Paths.get(f_name);
         try{
         	reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
-        	System.out.println("read file successfully\n");
 			String line;
 			num_tokens = 0;
 			num_tokens2 = 0;
 			while((line = reader.readLine()) != null){
 				line = line.toLowerCase();
-				words_kept = line.split("[ \n]");
-				System.out.println(line);
-
+				words_kept = line.split("[^abcdefghijklmnopqrstuvwxyz1234567890_']");
 				int i = 0;
 				for(i = 0; i < words_kept.length; i++){
 					token = words_kept[i];
 					if(token.length() == 0){
-						//System.out.println("LENGTH OF STRING ZERO BROTENDO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 					}
-					if(token.equals(" ") || token.equals("\n") || token.equals(null) || token.equals("")){
-						//System.out.println("NULL TOKEN BROTENTO WHAT'S GOOD!!!!!!!!!!!!!!!!!!!!!!!!!");
+					else if(token.equals("'")){
 					}
 					else{
-						token = token.replaceAll("[^abcdefghijklmnopqrstuvwxyz1234567890_]", "");
-						token = token.replaceAll("$\'", "");
-		        		token = token.replaceAll("\'^", "");
+						token = token.replaceAll("'$", "");
+		        		token = token.replaceAll("^'", "");
 						text_array.add(token);
-						//System.out.println("token:" + token);
-
 						num_tokens++;
 					}
-					//System.out.printf("num of tokens: %d\n", num_tokens);
 				}
 				num_tokens2++;
-				//System.out.printf("num_tokens2: %d\n", num_tokens2);
 			}
 			int size = text_array.size();
-			//String size_s = (String)size;
 			int i = 0;
-			System.out.println(size);
 			String key;
-			//System.out.printf("%d\n", text_array.size());
 			hash_table = new HashTable<String, Integer>();
 			for(i = 0; i < text_array.size(); i++){
 				Integer value;
@@ -84,38 +73,24 @@ public class WordFreqs{
 					value = new Integer(1);
 				}
 				//enter the new key, value pair into the table
-				//System.out.println("about to put: " + key);
 				hash_table.put(key, value);
-				//System.out.println("checking that we put it correctly...");
-				//System.out.println("value: " + hash_table.get(key));
-				hash_table.printTable();
 			}
-			System.out.println();
-			//hash_table.printTable();
-			for(i = 0; i < text_array.size(); i++){
-				String temp = (String)text_array.get(i);
-				//System.out.println("\n\nindex in text array: " + i);
-				System.out.println("\nkey: " + temp);
-				int h_ind = Math.abs(temp.hashCode()%hash_table.getSize());
-				System.out.println("hash index: " + h_ind);
-				if(hash_table.get(temp) != null){
-					System.out.printf("value: %d\n", hash_table.get(temp));
-				}
-				else{
-					System.out.println("---------- " +temp + " not in hash table--------");
-				}
-			}
-			//Integer test = hash_table.get("was");
 			System.out.println("Please enter a word you wish to find.");
 			System.out.println("To exit press enter");
+			System.out.println("This text contains "+hash_table.getDistinct()+" distinct words.");
 			sc = new Scanner(System.in);
 			while(true){
 				System.out.print(">");
 				String word = sc.nextLine();
 				if(word.equals("")){
+					System.out.println("Goodbye!");
 					System.exit(0);
 				}
-				if(hash_table.get(word) == null){
+				else if(word.startsWith("-")){
+					word = word.replaceAll("-", "");
+					hash_table.delete(word);
+				}
+				else if(hash_table.get(word) == null){
 					System.out.println("\"" + word + "\" does not appear.");
 				}
 				else{
@@ -129,8 +104,5 @@ public class WordFreqs{
         	System.err.println("couldn't open file...\n");
         	x.printStackTrace();
         }
-        
-		//BufferedReader file = new BufferedReader(f_name);
-
 	}
 }
