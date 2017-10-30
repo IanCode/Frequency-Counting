@@ -12,10 +12,14 @@ This project contains three separate classes. HashTable and HashElem must be use
 ### Usage
 
 To compile:
-`javac HashTable.java HashElem.java WordFreqs.java`
+```
+javac HashTable.java HashElem.java WordFreqs.java`
+```
 
 To run:
-`java WordFreqs [name of text file]`
+```
+java WordFreqs [name of text file]
+```
 
 Type a "-" before a word to delete it.
 i.e.
